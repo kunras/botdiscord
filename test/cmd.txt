@@ -1,0 +1,40 @@
+const Discord = require("discord.js");
+const client = new Discord.Client();
+const config = require("./config.json");
+const fs = require("fs");
+  // Prends tous les fichiers afin de faire fonctionner le bot
+
+
+client.on("ready", () => {
+  console.log("Bot connecté");
+  console.log("Bot dev par kunras en Node.js")
+});
+  // Affiche dans la console que le bot est bien pret
+
+const prefix = "!"; 
+client.on("message", (message) => {
+  // Détecte qu'il y a un message
+  
+  if (!message.content.startsWith(config.prefix) || message.author.bot) return;
+    // Verifie qu'il commence par la constante prefix et que ce n'est pas un bot qui envoye un message    
+
+	if(message.content.startsWith(config.prefix + "prefix")) {
+		let newPrefix = message.content.split(" ").slice(1, 2)[0];
+			// Mets le message sous forme de valeur
+		config.prefix = newPrefix;
+			// Copie la nouvelle valeur sur l'ancienne
+
+		fs.writeFile("./config.json", JSON.stringify(config), (err) => console.error);
+			// Now we have to save the file.
+	}
+
+ if (message.content.startsWith(config.prefix + "ping")) {
+    message.channel.send("pong!");
+  } else
+
+  if (message.content.startsWith(config.prefix + "foo")) {
+    message.channel.send("bar!");
+  }
+});
+
+client.login(config.token);
